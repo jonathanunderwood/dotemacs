@@ -53,6 +53,7 @@
 
 (use-package ivy
   :ensure t
+  :diminish
   :config (progn
             (setq ivy-use-virtual-buffers t
                   ivy-height 10
@@ -72,7 +73,9 @@
   :ensure t
   :defer t
   :bind
-  (("C-x g" . magit-status))  
+  (("C-x g" . magit-status)
+   ("C-x C-g" . magit-dispatch-popup)
+   )
   )
 
 (custom-set-variables
