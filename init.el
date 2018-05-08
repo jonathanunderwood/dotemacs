@@ -2,7 +2,6 @@
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
-;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("gnu" . "http://elpa.gnu.org/packages/"))
 (package-initialize)
 
@@ -27,9 +26,55 @@
 (require 'diminish)
 (require 'bind-key)
 
+;; Install quelpa for files not present in ELPA and MELPA.  Note that
+;; there's an alternative way to bootstrap
+;; use-package/quelpa/quelpa-use-package which involves using quelpa
+;; to install use-package. See:
+;; https://github.com/benaiah/quelpa-use-package-bootstrap-config
+(use-package quelpa
+  :ensure t
+  )
+
+(use-package quelpa-use-package
+  :ensure t
+  )
+
+;; zoom-frm and dependencies. These require quelpa and
+;; quelpa-use-package to be available
+(use-package frame-fns
+  :ensure t
+  :quelpa (frame-fns :fetcher github :repo "emacsmirror/frame-fns")
+  )
+(use-package frame-cmds
+  :ensure t
+  :quelpa (frame-cmds :fetcher github :repo "emacsmirror/frame-cmds")
+  )
+(use-package zoom-frm
+  :ensure t
+  :quelpa (zoom-frm :fetcher github :repo "emacsmirror/zoom-frm")
+  )
+
+
+;; Themes
+(use-package darktooth-theme
+  :ensure t
+  )
+
+(use-package moe-theme
+  :ensure t
+  )
+
+(use-package doom-themes
+  :ensure t
+  )
+
 ;; Turn off tool bar etc
 (tool-bar-mode -1)
 (menu-bar-mode -1)
+
+;; Highlight current line
+(global-hl-line-mode 1)
+
 
 ;; Ivy ecosystem
 (use-package swiper
