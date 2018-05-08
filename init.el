@@ -105,6 +105,11 @@
                   ivy-count-format "(%d/%d) ")
             (ivy-mode 1)))
 
+;; smex - integrates with ivy/swiper
+;; (use-package smex
+;;   :ensure t
+;;   )
+
 ;; which-key
 (use-package which-key
   :ensure t
