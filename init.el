@@ -64,9 +64,15 @@
   :ensure t
   )
 
+(use-package zenburn-theme
+  :ensure t
+  )
+
 (use-package doom-themes
   :ensure t
   )
+
+(load-theme 'darktooth t)
 
 ;; Turn off tool bar etc
 (tool-bar-mode -1)
@@ -110,6 +116,19 @@
 ;;   :ensure t
 ;;   )
 
+;; Projectile
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode)
+  (setq projectile-enable-caching t))
+
+(use-package counsel-projectile
+  :ensure t
+  :config
+  (counsel-projectile-mode)
+  )
+
 ;; which-key
 (use-package which-key
   :ensure t
@@ -128,12 +147,102 @@
    )
   )
 
+;; Company
+(use-package company               
+  :ensure t
+  :defer t
+  :init
+  (global-company-mode)
+  :config
+  (progn
+    ;; Use Company for completion
+    (bind-key [remap completion-at-point] #'company-complete company-mode-map)
+    (setq company-tooltip-align-annotations t
+          ;; Easy navigation to candidates with M-<n>
+          company-show-numbers t)
+    (setq company-dabbrev-downcase nil))
+  :diminish company-mode
+  )
+
+(use-package company-quickhelp          ; Documentation popups for Company
+  :ensure t
+  :defer t
+  :init
+  (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
+  )
+
+;; flycheck
+(use-package flycheck
+  :ensure t
+  :defer t
+  :init
+  (global-flycheck-mode)
+  )
+
+;; (use-package flycheck
+;;   :ensure t
+;;   :preface
+;;   (declare-function flycheck-next-error flycheck nil)
+;;   (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
+;;   (fringe-mode (quote (4 . 0)))
+;;   :init (global-flycheck-mode)
+;;   :config
+;;   ;(setq flycheck-emacs-lisp-load-path 'inherit)
+;;   (setq flycheck-python-flake8-executable "flake8")
+;;   (setq flycheck-highlighting-mode 'lines))
+
+
+;; YAML mode
+(use-package yaml-mode
+  :ensure t
+  :defer t
+  )
+
+;; Python
+;; See: https://github.com/howardabrams/dot-files/blob/master/emacs-python.org
+(use-package python
+  :mode ("\\.py\\'" . python-mode)
+        ("\\.wsgi$" . python-mode)
+  :interpreter ("python" . python-mode)
+  :init
+  (setq-default indent-tabs-mode nil)
+  :config
+  (setq python-indent-offset 4)
+  (add-hook 'python-mode-hook 'smartparens-mode)
+  (add-hook 'python-mode-hook 'color-identifiers-mode))
+
+(use-package jedi
+  :ensure t
+  :init
+  (add-to-list 'company-backends 'company-jedi)
+  :config
+  (use-package company-jedi
+    :ensure t
+    :init
+    (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
+    (setq company-jedi-python-bin "python")))
+
+(use-package anaconda-mode
+  :ensure t
+  :init (add-hook 'python-mode-hook 'anaconda-mode)
+        (add-hook 'python-mode-hook 'anaconda-eldoc-mode)
+  :config (use-package company-anaconda
+            :ensure t
+            :init (add-hook 'python-mode-hook 'anaconda-mode)
+            (eval-after-load "company"
+              '(add-to-list 'company-backends '(company-anaconda :with company-capf)))))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages (quote (ivy use-package))))
+ '(custom-safe-themes
+   (quote
+    ("a4d03266add9a1c8f12b5309612cbbf96e1291773c7bc4fb685bfdaf83b721c6" default)))
+ '(package-selected-packages (quote (ivy use-package)))
+ '(pos-tip-background-color "#36473A")
+ '(pos-tip-foreground-color "#FFFFC8"))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
