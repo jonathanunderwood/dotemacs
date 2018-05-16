@@ -200,6 +200,14 @@
 
 ;; Python
 ;; See: https://github.com/howardabrams/dot-files/blob/master/emacs-python.org
+(use-package color-identifiers-mode
+  :ensure t
+  )
+
+(use-package smartparens-mode
+  :ensure t
+  )
+
 (use-package python
   :mode ("\\.py\\'" . python-mode)
         ("\\.wsgi$" . python-mode)
