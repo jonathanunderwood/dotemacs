@@ -1,3 +1,8 @@
+;;; init --- Jonathan Underwood's init.el
+;;; Commentary:
+;;; work in progress
+;;; Code:
+
 ;; Bootstrap use-package
 (require 'package)
 (setq package-enable-at-startup nil)
@@ -81,13 +86,13 @@
 ;; Highlight current line
 (global-hl-line-mode 1)
 
-
 ;; Ivy ecosystem
 (use-package swiper
   :ensure t
   :bind (("C-s" . swiper)
          ("C-r" . swiper))
   :config (setq search-default-mode nil))
+
 (use-package counsel
   :ensure t
   :bind
@@ -119,8 +124,9 @@
 ;; Projectile
 (use-package projectile
   :ensure t
+  :diminish projectile
   :config
-  (projectile-global-mode)
+  (projectile-mode)
   (setq projectile-enable-caching t))
 
 (use-package counsel-projectile
@@ -148,10 +154,10 @@
   )
 
 ;; Company
-(use-package company               
+(use-package company
   :ensure t
   :defer t
-  :init
+  :idle ; rather than :init to speed up startup
   (global-company-mode)
   :config
   (progn
@@ -164,7 +170,7 @@
   :diminish company-mode
   )
 
-(use-package company-quickhelp          ; Documentation popups for Company
+(use-package company-quickhelp ; Documentation popups for Company
   :ensure t
   :defer t
   :init
@@ -177,20 +183,42 @@
   :defer t
   :init
   (global-flycheck-mode)
-  )
-
-;; (use-package flycheck
-;;   :ensure t
-;;   :preface
-;;   (declare-function flycheck-next-error flycheck nil)
-;;   (add-hook 'flycheck-mode-hook 'flycheck-color-mode-line-mode)
-;;   (fringe-mode (quote (4 . 0)))
-;;   :init (global-flycheck-mode)
-;;   :config
-;;   ;(setq flycheck-emacs-lisp-load-path 'inherit)
-;;   (setq flycheck-python-flake8-executable "flake8")
-;;   (setq flycheck-highlighting-mode 'lines))
-
+  ;; Custom fringe indicator
+  (when (fboundp 'define-fringe-bitmap)
+    (define-fringe-bitmap 'my-flycheck-fringe-indicator
+      (vector #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00011100
+              #b00111110
+              #b00111110
+              #b00111110
+              #b00011100
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000
+              #b00000000)))
+    (flycheck-define-error-level 'error
+      :severity 2
+      :overlay-category 'flycheck-error-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-error)
+    (flycheck-define-error-level 'warning
+      :severity 1
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-warning)
+    (flycheck-define-error-level 'info
+      :severity 0
+      :overlay-category 'flycheck-info-overlay
+      :fringe-bitmap 'my-flycheck-fringe-indicator
+      :fringe-face 'flycheck-fringe-info)
+    )
 
 ;; YAML mode
 (use-package yaml-mode
@@ -228,7 +256,8 @@
     :ensure t
     :init
     (add-hook 'python-mode-hook (lambda () (add-to-list 'company-backends 'company-jedi)))
-    (setq company-jedi-python-bin "python")))
+    )
+  )
 
 (use-package anaconda-mode
   :ensure t
@@ -257,3 +286,5 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;;; init.el ends here
