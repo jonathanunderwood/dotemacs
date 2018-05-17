@@ -232,10 +232,12 @@
 ;; See: https://github.com/howardabrams/dot-files/blob/master/emacs-python.org
 (use-package color-identifiers-mode
   :ensure t
+  :diminish color-identifiers-mode
   )
 
-(use-package smartparens-mode
+(use-package smartparens
   :ensure t
+  diminish smartparens-mode
   )
 
 (use-package python
