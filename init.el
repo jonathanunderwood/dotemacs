@@ -124,7 +124,7 @@
 ;; Projectile
 (use-package projectile
   :ensure t
-  :diminish projectile
+  :diminish projectile-mode
   :config
   (projectile-mode)
   (setq projectile-enable-caching t))
@@ -172,6 +172,7 @@
 
 (use-package company-quickhelp ; Documentation popups for Company
   :ensure t
+  :diminish company-mode
   :defer t
   :init
   (add-hook 'global-company-mode-hook #'company-quickhelp-mode)
@@ -181,6 +182,7 @@
 (use-package flycheck
   :ensure t
   :defer t
+  :diminish flycheck-mode
   :init
   (global-flycheck-mode)
   ;; Custom fringe indicator
